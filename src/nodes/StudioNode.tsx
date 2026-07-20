@@ -377,13 +377,13 @@ function InlineVideo({ src, poster, label }: { src: string; poster?: string; lab
 
 function MediaContent({ id, data, isVideo }: { id: string; data: StudioNodeData; isVideo?: boolean }) {
   if (data.assetCategory && !isVideo) return <AssetMediaContent id={id} data={data} />;
-  const hasGeneratedMedia = data.state === "running" || data.state === "success" || data.state === "review";
+  const hasGeneratedMedia = Boolean(data.mediaSrc) && (data.storyboardShot || data.state === "running" || data.state === "success" || data.state === "review");
   return <div className="media-content">
     <div className={`media-preview ${hasGeneratedMedia ? "media-crop" : ""}`} style={hasGeneratedMedia ? mediaStyle(data.mediaPosition, data.mediaSrc, data.mediaFit) : undefined}>
       {hasGeneratedMedia && isVideo && data.videoSrc && <InlineVideo src={data.videoSrc} poster={data.mediaSrc} label={`${data.label}视频预览`} />}
       {hasGeneratedMedia && isVideo && !data.videoSrc && <button className="play-button" aria-label="播放预览"><Play size={17} fill="currentColor" /></button>}
       {data.state === "running" && <div className="render-progress"><span style={{ width: `${data.progress ?? 64}%` }} /></div>}
-      {(data.state === "empty" || data.state === "needs-config" || data.state === "ready") && <div className="media-empty"><ImageIcon size={20} /><span>{data.state === "needs-config" ? "等待上游" : data.state === "ready" ? "可执行" : data.storyboardShot ? "等待执行" : "等待输入"}</span><WorkflowRunButton id={id} data={data} label={isVideo ? "生成视频" : "生成图片"} /></div>}
+      {!hasGeneratedMedia && (data.state === "empty" || data.state === "needs-config" || data.state === "ready") && <div className="media-empty"><ImageIcon size={20} /><span>{data.state === "needs-config" ? "等待上游" : data.state === "ready" ? "可执行" : data.storyboardShot ? "等待执行" : "等待输入"}</span><WorkflowRunButton id={id} data={data} label={isVideo ? "生成视频" : "生成图片"} /></div>}
     </div>
     {data.storyboardShot && data.referenceLabels && <div className="storyboard-reference-list"><span>引用</span>{data.referenceLabels.map((reference) => <i className={`storyboard-reference storyboard-reference--${reference.category}`} title={reference.label} key={reference.category}>{reference.label}</i>)}</div>}
     <div className="node-foot"><span>{isVideo ? "16:9 · 1080p" : "4 张 · 2K"}</span><span className="mono">seed 4821</span></div>

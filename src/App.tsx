@@ -43,6 +43,50 @@ import type { AssetCategory, NodeCreationOptions, NodeKind, NodeState, StudioNod
 const scenario = new URLSearchParams(window.location.search).get("scenario") ?? "empty";
 const studioNodeTypes = { studio: StudioNodeComponent };
 
+function uniqueSequence(primary: Array<string | undefined>, fallback: string[], count: number) {
+  const seen = new Set<string>();
+  const sequence: string[] = [];
+  [...primary, ...fallback].forEach((src) => {
+    if (!src || seen.has(src) || sequence.length >= count) return;
+    seen.add(src);
+    sequence.push(src);
+  });
+  return sequence;
+}
+
+function byNodeY(a: StudioNode, b: StudioNode) {
+  return a.position.y - b.position.y;
+}
+
+function collectReviewMedia(nodes: StudioNode[], source: StudioNode) {
+  const siblings = source.parentId
+    ? nodes.filter((node) => node.parentId === source.parentId && ["image", "video"].includes(node.data.kind)).sort(byNodeY)
+    : [];
+  const sourceMedia = source.data.mediaSequence?.length
+    ? source.data.mediaSequence
+    : [source.data.mediaSrc, ...siblings.map((node) => node.data.mediaSrc)];
+  const sourceVideos = source.data.videoSequence?.length
+    ? source.data.videoSequence
+    : [source.data.videoSrc, ...siblings.map((node) => node.data.videoSrc)];
+  return {
+    mediaSequence: uniqueSequence(sourceMedia, academyStoryboardFrames, 4),
+    videoSequence: uniqueSequence(sourceVideos, academyVideoFiles, 4)
+  };
+}
+
+function collectTimelineMedia(nodes: StudioNode[]) {
+  const videoShots = nodes.filter((node) => node.parentId === "storyboard-video-lane").sort(byNodeY);
+  const mediaSequence = uniqueSequence(videoShots.map((node) => node.data.mediaSrc), academyStoryboardFrames, academyShots.length);
+  const videoSequence = uniqueSequence(videoShots.map((node) => node.data.videoSrc), academyVideoFiles, academyShots.length);
+  return {
+    videoShots,
+    mediaSequence,
+    videoSequence,
+    mediaSrc: mediaSequence[0],
+    videoSrc: videoSequence[0]
+  };
+}
+
 type CanvasGraph = {
   nodes: StudioNode[];
   edges: Edge[];
@@ -1066,7 +1110,7 @@ function CanvasApp() {
     setNodes((current) => current.map((node) => node.id === id
       ? { ...node, data: { ...node.data, state: "running", progress: 6 } }
       : childIds.includes(node.id)
-        ? { ...node, data: { ...node.data, state: "empty", progress: 0 } }
+        ? { ...node, data: { ...node.data, state: "running", progress: 8 } }
         : node));
     childIds.forEach((childId, index) => {
       const startDelay = index * 145;
@@ -1285,11 +1329,31 @@ function CanvasApp() {
   }, [focusStoryboardLane, runNode, runStoryboardGroup, setEdges, setNodes]);
 
   const approveReview = useCallback((id: string) => {
-    setNodes((current) => current.map((node) => {
+    setNodes((current) => {
+      const approvedReview = current.find((node) => node.id === id);
+      return current.map((node) => {
       if (node.id === id) return { ...node, data: { ...node.data, state: "success", subtitle: "候选 A · 已通过" } };
-      if (node.id === "timeline") return { ...node, data: { ...node.data, subtitle: "4 / 8 镜头已通过" } };
+      if (node.id === "timeline") {
+        const timelineMedia = collectTimelineMedia(current);
+        const reviewMedia = approvedReview?.data.mediaSequence?.length ? approvedReview.data.mediaSequence : timelineMedia.mediaSequence;
+        const reviewVideos = approvedReview?.data.videoSequence?.length ? approvedReview.data.videoSequence : timelineMedia.videoSequence;
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            state: node.data.state === "empty" ? "ready" : node.data.state,
+            subtitle: "4 / 8 镜头已通过",
+            mediaSrc: node.data.mediaSrc ?? reviewMedia[0],
+            videoSrc: node.data.videoSrc ?? reviewVideos[0],
+            mediaSequence: node.data.mediaSequence?.length ? node.data.mediaSequence : reviewMedia,
+            videoSequence: node.data.videoSequence?.length ? node.data.videoSequence : reviewVideos,
+            mediaFit: node.data.mediaFit ?? "cover"
+          }
+        };
+      }
       return node;
-    }));
+      });
+    });
     setSelectedId(null);
   }, [setNodes]);
 
@@ -1313,9 +1377,8 @@ function CanvasApp() {
           ? parent.position.x + parentWidth + 80
           : source.position.x + sourceWidth + 90;
       const reviewsInRow = current.filter((node) => node.data.kind === "review" && Math.abs(node.position.y - sourceY) < 36).length;
-      const sourceMedia = source.data.mediaSequence?.length
-        ? source.data.mediaSequence.slice(0, 4)
-        : [source.data.mediaSrc ?? academyStoryboardFrames[0]];
+      const reviewMedia = collectReviewMedia(current, source);
+      const candidateCount = reviewMedia.mediaSequence.length;
 
       const reviewNode: StudioNode = {
         id: reviewId,
@@ -1324,11 +1387,11 @@ function CanvasApp() {
         position: { x: baseX + reviewsInRow * 400, y: sourceY },
         data: {
           label: "候选质检",
-          subtitle: `${source.data.label} · 1 / 4 候选`,
+          subtitle: `${source.data.label} · ${candidateCount} / 4 候选`,
           kind: "review",
           state: "review",
-          mediaSequence: sourceMedia,
-          videoSequence: source.data.videoSrc ? [source.data.videoSrc] : undefined,
+          mediaSequence: reviewMedia.mediaSequence,
+          videoSequence: reviewMedia.videoSequence,
           width: 360,
           onApprove: approveReview,
           onCloseControls: () => setSelectedId(null)
@@ -1407,7 +1470,8 @@ function CanvasApp() {
 
   useEffect(() => {
     if (isDemoScenario) return;
-    const videoShots = nodes.filter((node) => node.parentId === "storyboard-video-lane");
+    const timelineMedia = collectTimelineMedia(nodes);
+    const videoShots = timelineMedia.videoShots;
     const timeline = nodes.find((node) => node.id === "timeline");
     if (!timeline) return;
 
@@ -1415,8 +1479,22 @@ function CanvasApp() {
     const allVideosReady = videoShots.length === academyShots.length && completedVideoCount === academyShots.length;
     const nextState = allVideosReady ? "ready" : "empty";
     const nextSubtitle = `${completedVideoCount} / ${academyShots.length} 分镜视频已就绪`;
-    if (timeline.data.state !== nextState || timeline.data.subtitle !== nextSubtitle) {
-      setNodes((current) => current.map((node) => node.id === "timeline" ? { ...node, data: { ...node.data, state: nextState, subtitle: nextSubtitle } } : node));
+    const needsTimelineMedia = allVideosReady && (!timeline.data.mediaSequence?.length || !timeline.data.mediaSrc || !timeline.data.videoSrc);
+    if (timeline.data.state !== nextState || timeline.data.subtitle !== nextSubtitle || needsTimelineMedia) {
+      setNodes((current) => current.map((node) => node.id === "timeline" ? {
+        ...node,
+        data: {
+          ...node.data,
+          state: nextState,
+          subtitle: nextSubtitle,
+          mediaSrc: node.data.mediaSrc ?? timelineMedia.mediaSrc,
+          videoSrc: node.data.videoSrc ?? timelineMedia.videoSrc,
+          mediaSequence: node.data.mediaSequence?.length ? node.data.mediaSequence : timelineMedia.mediaSequence,
+          videoSequence: node.data.videoSequence?.length ? node.data.videoSequence : timelineMedia.videoSequence,
+          totalDuration: allVideosReady ? node.data.totalDuration ?? "01:11" : node.data.totalDuration,
+          mediaFit: node.data.mediaFit ?? "cover"
+        }
+      } : node));
     }
 
     if (!allVideosReady) return;
@@ -1500,7 +1578,8 @@ function CanvasApp() {
       const id = "timeline";
       setNodes((current) => {
         if (current.some((node) => node.id === id)) return current;
-        const videoShots = current.filter((node) => node.parentId === "storyboard-video-lane");
+        const timelineMedia = collectTimelineMedia(current);
+        const videoShots = timelineMedia.videoShots;
         const completedVideoCount = videoShots.filter((node) => node.data.state === "success").length;
         const allVideosReady = videoShots.length === academyShots.length && completedVideoCount === academyShots.length;
         return [...current, {
@@ -1513,6 +1592,12 @@ function CanvasApp() {
             kind: "timeline",
             state: allVideosReady ? "ready" : "empty",
             subtitle: `${completedVideoCount} / ${academyShots.length} 分镜视频已就绪`,
+            mediaSrc: timelineMedia.mediaSrc,
+            videoSrc: timelineMedia.videoSrc,
+            mediaSequence: timelineMedia.mediaSequence,
+            videoSequence: timelineMedia.videoSequence,
+            totalDuration: allVideosReady ? "01:11" : undefined,
+            mediaFit: "cover",
             onOpenEditor: openEditor,
             onCloseControls: () => setSelectedId(null)
           },
