@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { Clock3, History, Layers3, Plus, Search, Sparkles, UserRound, Users, Workflow, X } from "lucide-react";
 import { nodeCatalog } from "../data/canvas";
 import type { NodeCreationOptions, NodeKind } from "../data/types";
+import { mediaCssUrl, mediaUrl } from "../utils/media";
 
 export type DockView = "add" | "workflow" | "roles" | "history" | null;
 export type WorkflowTemplateId = "design-expert" | "product-ad" | "asset-setting";
@@ -41,21 +42,21 @@ const workflowCards: Array<{
 }> = [
   {
     id: "design-expert",
-    visual: "/media/workflows/design-expert-cover.png",
+    visual: mediaUrl("media/workflows/design-expert-cover.png"),
     visualClass: "workflow-visual--design",
     title: "设计专家生图流",
     subtitle: "参考片解析 · 风格板 · 生图 · 精修"
   },
   {
     id: "product-ad",
-    visual: "/media/workflows/product-ad-cover.png",
+    visual: mediaUrl("media/workflows/product-ad-cover.png"),
     visualClass: "workflow-visual--product",
     title: "产品广告成片流",
     subtitle: "卖点拆解 · 产品场景 · 视频 · 剪辑"
   },
   {
     id: "asset-setting",
-    visual: "/media/workflows/asset-setting-cover.png",
+    visual: mediaUrl("media/workflows/asset-setting-cover.png"),
     visualClass: "workflow-visual--asset",
     title: "资产设定工作流",
     subtitle: "角色 · 场景 · 道具 · 一致性"
@@ -67,14 +68,14 @@ function WorkflowPanel({ onApplyWorkflow }: Pick<Props, "onApplyWorkflow">) {
 }
 
 const roles = [
-  { name: "Hikaru", src: "/media/academy/character-hikaru.png" },
-  { name: "校医", src: "/media/academy/character-doctor.png" },
-  { name: "周成", src: "/media/academy/character-zhou-cheng.png" },
-  { name: "林小光", src: "/media/academy/character-lin-xiaoguang.png" }
+  { name: "Hikaru", src: mediaUrl("media/academy/character-hikaru.png") },
+  { name: "校医", src: mediaUrl("media/academy/character-doctor.png") },
+  { name: "周成", src: mediaUrl("media/academy/character-zhou-cheng.png") },
+  { name: "林小光", src: mediaUrl("media/academy/character-lin-xiaoguang.png") }
 ];
 
 function RolesPanel() {
-  return <div className="dock-panel dock-panel--roles"><div className="dock-panel-head"><div><strong>角色库</strong><span>4 个可用角色</span></div><UserRound size={15} /></div><label className="dock-search"><Search size={14} /><input placeholder="搜索角色" /></label><div className="role-grid">{roles.map((role) => <button key={role.name}><span className="media-crop" style={{ "--media-image": `url("${role.src}")`, "--media-fit": "contain", "--media-position": "50% 18%" } as CSSProperties} /><b>{role.name}</b><small>已认证 · v1</small></button>)}</div></div>;
+  return <div className="dock-panel dock-panel--roles"><div className="dock-panel-head"><div><strong>角色库</strong><span>4 个可用角色</span></div><UserRound size={15} /></div><label className="dock-search"><Search size={14} /><input placeholder="搜索角色" /></label><div className="role-grid">{roles.map((role) => <button key={role.name}><span className="media-crop" style={{ "--media-image": mediaCssUrl(role.src), "--media-fit": "contain", "--media-position": "50% 18%" } as CSSProperties} /><b>{role.name}</b><small>已认证 · v1</small></button>)}</div></div>;
 }
 
 function HistoryPanel() {

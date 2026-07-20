@@ -1,5 +1,6 @@
 import type { Edge } from "@xyflow/react";
 import type { AssetCategory, ShotDetailData, StudioNode } from "./types";
+import { mediaUrl } from "../utils/media";
 
 export type DemoAsset = {
   id: string;
@@ -15,28 +16,28 @@ export const characters: DemoAsset[] = [
     label: "Hikaru",
     category: "character",
     description: "失忆探索期学生，黑色短发与深色立领校服，警觉克制，在压力下快速观察环境。",
-    mediaSrc: "/media/academy/character-hikaru.png"
+    mediaSrc: mediaUrl("media/academy/character-hikaru.png")
   },
   {
     id: "asset-characters-2",
     label: "校医",
     category: "character",
     description: "深渊学园校医，白色长外套与平板终端，语气冷峻，具有明显的权威压迫感。",
-    mediaSrc: "/media/academy/character-doctor.png"
+    mediaSrc: mediaUrl("media/academy/character-doctor.png")
   },
   {
     id: "asset-characters-3",
     label: "周成",
     category: "character",
     description: "深渊学园导师期角色，深灰西装与黑色高领，沉稳从容，负责引导 Hikaru 熟悉学园。",
-    mediaSrc: "/media/academy/character-zhou-cheng.png"
+    mediaSrc: mediaUrl("media/academy/character-zhou-cheng.png")
   },
   {
     id: "asset-characters-4",
     label: "林小光",
     category: "character",
     description: "深渊学园学生期角色，深灰运动校服，外向活跃，对新来的失忆转学生充满好奇。",
-    mediaSrc: "/media/academy/character-lin-xiaoguang.png"
+    mediaSrc: mediaUrl("media/academy/character-lin-xiaoguang.png")
   }
 ];
 
@@ -46,21 +47,21 @@ export const scenes: DemoAsset[] = [
     label: "医务室_病床区全景_白天",
     category: "scene",
     description: "白天的深渊学园医务室，冷白顶光、病床、药柜与监护设备构成洁净而压迫的空间。",
-    mediaSrc: "/media/academy/scene-medical-room.png"
+    mediaSrc: mediaUrl("media/academy/scene-medical-room.png")
   },
   {
     id: "asset-scenes-2",
     label: "教学楼走廊_完好状态_白天",
     category: "scene",
     description: "通透的教学楼长走廊，窗侧自然光在湿润地面形成纵深反射，空间完整安静。",
-    mediaSrc: "/media/academy/scene-corridor-intact.png"
+    mediaSrc: mediaUrl("media/academy/scene-corridor-intact.png")
   },
   {
     id: "asset-scenes-3",
     label: "教学楼走廊_破窗战损_白天",
     category: "scene",
     description: "同一走廊的战损状态，玻璃破裂、碎片散落，强光穿过破窗形成危险的高反差空间。",
-    mediaSrc: "/media/academy/scene-corridor-damaged.png"
+    mediaSrc: mediaUrl("media/academy/scene-corridor-damaged.png")
   }
 ];
 
@@ -70,14 +71,14 @@ export const props: DemoAsset[] = [
     label: "临床平板终端",
     category: "prop",
     description: "校医使用的深色临床平板，显示学生身份、入学记录与生命体征，边框带有冷白状态灯。",
-    mediaSrc: "/media/academy/prop-clinical-tablet.png"
+    mediaSrc: mediaUrl("media/academy/prop-clinical-tablet.png")
   },
   {
     id: "asset-props-2",
     label: "电击警棍",
     category: "prop",
     description: "校医腰间携带的黑色制式电击警棍，短柄结构与安全锁清晰，符合学园医务装备体系。",
-    mediaSrc: "/media/academy/prop-electric-baton.png"
+    mediaSrc: mediaUrl("media/academy/prop-electric-baton.png")
   }
 ];
 
@@ -93,8 +94,8 @@ const assetCollections = [
   { key: "props", label: "道具", category: "prop" as const, y: 1270, assets: props }
 ];
 
-export const storyboardFrames = Array.from({ length: 7 }, (_, index) => `/media/academy/storyboard-${String(index + 1).padStart(2, "0")}.png`);
-export const videoFiles = Array.from({ length: 7 }, (_, index) => `/media/academy/segment-${String(index + 1).padStart(2, "0")}.mp4`);
+export const storyboardFrames = Array.from({ length: 7 }, (_, index) => mediaUrl(`media/academy/storyboard-${String(index + 1).padStart(2, "0")}.png`));
+export const videoFiles = Array.from({ length: 7 }, (_, index) => mediaUrl(`media/academy/segment-${String(index + 1).padStart(2, "0")}.mp4`));
 
 export const shots = [
   { id: "01", label: "SHOT 01", title: "病床惊醒", duration: "8s", assets: [characters[0], characters[1], scenes[0], props[0]] },

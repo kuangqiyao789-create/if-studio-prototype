@@ -47,7 +47,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .undo-group { display: flex; align-items: center; margin-right: 4px; padding-right: 8px; border-right: 0; }
 .user-account { height: 36px; display: flex; align-items: center; gap: 8px; padding: 3px 9px 3px 4px; border: 0; border-radius: var(--radius-pill); color: var(--text3); background: var(--surface1); cursor: pointer; }
 .user-account:hover { color: var(--text1); border-color: var(--border-visible); background: var(--surface2); }
-.user-avatar { width: 28px; height: 28px; flex: 0 0 auto; border: 0; border-radius: 50%; background-image: url("/media/academy/character-hikaru.png"); background-size: cover; background-position: 50% 16%; }
+.user-avatar { width: 28px; height: 28px; flex: 0 0 auto; border: 0; border-radius: 50%; background-size: cover; background-position: 50% 16%; }
 .user-points { display: inline-flex; align-items: center; gap: 5px; color: var(--text2); font-size: 11px; font-weight: 600; white-space: nowrap; }
 .user-points svg { color: var(--accent); }
 
@@ -480,7 +480,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px
 .media-empty .node-run-action { margin-top: 2px; }
 .storyboard-node-run { height: 24px; display: inline-flex; align-items: center; gap: 4px; margin-top: 3px; padding: 0 8px; border: 0; border-radius: var(--radius-pill); color: #071318; background: var(--accent); font-size: 8px; font-weight: 600; cursor: pointer; }
 .storyboard-node-run:hover { filter: brightness(1.08); }
-.media-crop { background-image: var(--media-image, url("/media/academy/storyboard-01.png")); background-size: var(--media-fit, cover); background-position: var(--media-position, 50% 50%); background-repeat: no-repeat; }
+.media-crop { background-image: var(--media-image); background-size: var(--media-fit, cover); background-position: var(--media-position, 50% 50%); background-repeat: no-repeat; }
 
 .asset-media { min-width: 0; display: grid; gap: 8px; }
 .asset-preview { position: relative; min-width: 0; overflow: hidden; border-radius: 6px; background: #101010; }

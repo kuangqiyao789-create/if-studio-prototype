@@ -24,6 +24,7 @@ import {
   storyboardFrames as academyStoryboardFrames
 } from "../data/demo";
 import type { AssetCategory, StudioNodeData } from "../data/types";
+import { mediaCssUrl, mediaUrl } from "../utils/media";
 
 type Props = {
   data: StudioNodeData;
@@ -32,7 +33,7 @@ type Props = {
 };
 
 const mediaStyle = (src: string, fit: "cover" | "contain" = "cover") => ({
-  "--media-image": `url("${src}")`,
+  "--media-image": mediaCssUrl(src),
   "--media-fit": fit,
   "--media-position": "50% 50%"
 } as CSSProperties);
@@ -243,8 +244,8 @@ function ReviewControls({ data, onClose, onRun }: Props) {
       <button className="inline-close" aria-label="关闭节点扩展栏" onClick={onClose}><X size={13} /></button>
     </div>
     <div className="inline-review-candidates">
-      <button className="selected"><span className="media-crop" style={mediaStyle(data.mediaSequence?.[0] ?? "/media/academy/storyboard-01.png")} /><b>候选 A</b><small>当前采用</small><Check size={12} /></button>
-      <button><span className="media-crop" style={mediaStyle(data.mediaSequence?.[1] ?? "/media/academy/storyboard-02.png")} /><b>候选 B</b><small>备用版本</small></button>
+      <button className="selected"><span className="media-crop" style={mediaStyle(data.mediaSequence?.[0] ?? mediaUrl("media/academy/storyboard-01.png"))} /><b>候选 A</b><small>当前采用</small><Check size={12} /></button>
+      <button><span className="media-crop" style={mediaStyle(data.mediaSequence?.[1] ?? mediaUrl("media/academy/storyboard-02.png"))} /><b>候选 B</b><small>备用版本</small></button>
     </div>
     <div className="inline-review-summary">
       <span><Check size={11} />角色一致性通过</span><span><Check size={11} />画面稳定通过</span>

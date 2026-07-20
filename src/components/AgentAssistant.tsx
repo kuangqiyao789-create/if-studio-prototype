@@ -1,4 +1,5 @@
 import { ArrowUp, Minimize2, X } from "lucide-react";
+import { mediaUrl } from "../utils/media";
 
 export type AgentCanvasContext = {
   stage: string;
@@ -41,7 +42,7 @@ type Props = {
   onJourneyStageSelect: (stage: AgentJourneyStage) => void;
 };
 
-const agentIpSrc = "/media/ifstudio-agent-ip-brand.png";
+const agentIpSrc = mediaUrl("media/ifstudio-agent-ip-brand.png");
 
 function AgentAvatar({ small = false }: { small?: boolean }) {
   return <span className={`agent-symbol agent-symbol--ip ${small ? "small" : ""}`} aria-hidden="true">

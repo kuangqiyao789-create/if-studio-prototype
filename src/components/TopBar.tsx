@@ -1,4 +1,10 @@
+import type { CSSProperties } from "react";
 import { ChevronDown, Cloud, Gem, Redo2, Undo2 } from "lucide-react";
+import { mediaCssUrl } from "../utils/media";
+
+const avatarStyle = {
+  backgroundImage: mediaCssUrl("media/academy/character-hikaru.png")
+} satisfies CSSProperties;
 
 export default function TopBar() {
   return (
@@ -9,7 +15,7 @@ export default function TopBar() {
       <div className="topbar-actions">
         <div className="undo-group"><button className="icon-button" aria-label="撤销"><Undo2 size={16} /></button><button className="icon-button" aria-label="重做"><Redo2 size={16} /></button></div>
         <button className="user-account" aria-label="用户账户，1280 积分">
-          <span className="user-avatar" />
+          <span className="user-avatar" style={avatarStyle} />
           <span className="user-points"><Gem size={13} />1,280 积分</span>
           <ChevronDown size={13} />
         </button>

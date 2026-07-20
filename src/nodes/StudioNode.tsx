@@ -37,6 +37,7 @@ import {
   storyboardFrames as academyStoryboardFrames
 } from "../data/demo";
 import type { ShotDetailData, StudioNode as StudioNodeType, StudioNodeData } from "../data/types";
+import { mediaCssUrl } from "../utils/media";
 
 const iconMap: Record<StudioNodeData["kind"], ComponentType<{ size?: number }>> = {
   brief: FileText,
@@ -78,7 +79,7 @@ const mediaStyle = (
   fit: StudioNodeData["mediaFit"] = "cover"
 ) => ({
   "--media-position": src ? "50% 50%" : position,
-  "--media-image": `url("${src ?? academyStoryboardFrames[0]}")`,
+  "--media-image": mediaCssUrl(src ?? academyStoryboardFrames[0]),
   "--media-fit": fit
 } as CSSProperties);
 

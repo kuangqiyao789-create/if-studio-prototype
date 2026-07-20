@@ -1,19 +1,20 @@
 import { useState, type KeyboardEvent } from "react";
 import { Boxes, ChevronLeft, FileStack, MessageSquare, Search, Settings, Waypoints, X } from "lucide-react";
 import { canvasElementCatalog } from "../data/canvas";
+import { mediaCssUrl, mediaUrl } from "../utils/media";
 
 export type AssetResult = { id: string; nodeId: string; label: string; type: string; src: string };
 
 const assets: AssetResult[] = [
-  { id: "character-hikaru", nodeId: "asset-characters-1", label: "Hikaru · 失忆探索期", type: "角色", src: "/media/academy/character-hikaru.png" },
-  { id: "character-doctor", nodeId: "asset-characters-2", label: "校医 · 基础常态期", type: "角色", src: "/media/academy/character-doctor.png" },
-  { id: "character-zhou", nodeId: "asset-characters-3", label: "周成 · 导师期", type: "角色", src: "/media/academy/character-zhou-cheng.png" },
-  { id: "character-lin", nodeId: "asset-characters-4", label: "林小光 · 学生期", type: "角色", src: "/media/academy/character-lin-xiaoguang.png" },
-  { id: "scene-medical", nodeId: "asset-scenes-1", label: "医务室_病床区全景_白天", type: "场景", src: "/media/academy/scene-medical-room.png" },
-  { id: "scene-corridor", nodeId: "asset-scenes-2", label: "教学楼走廊_完好状态_白天", type: "场景", src: "/media/academy/scene-corridor-intact.png" },
-  { id: "scene-damaged", nodeId: "asset-scenes-3", label: "教学楼走廊_破窗战损_白天", type: "场景", src: "/media/academy/scene-corridor-damaged.png" },
-  { id: "prop-tablet", nodeId: "asset-props-1", label: "临床平板终端", type: "道具", src: "/media/academy/prop-clinical-tablet.png" },
-  { id: "prop-baton", nodeId: "asset-props-2", label: "电击警棍", type: "道具", src: "/media/academy/prop-electric-baton.png" }
+  { id: "character-hikaru", nodeId: "asset-characters-1", label: "Hikaru · 失忆探索期", type: "角色", src: mediaUrl("media/academy/character-hikaru.png") },
+  { id: "character-doctor", nodeId: "asset-characters-2", label: "校医 · 基础常态期", type: "角色", src: mediaUrl("media/academy/character-doctor.png") },
+  { id: "character-zhou", nodeId: "asset-characters-3", label: "周成 · 导师期", type: "角色", src: mediaUrl("media/academy/character-zhou-cheng.png") },
+  { id: "character-lin", nodeId: "asset-characters-4", label: "林小光 · 学生期", type: "角色", src: mediaUrl("media/academy/character-lin-xiaoguang.png") },
+  { id: "scene-medical", nodeId: "asset-scenes-1", label: "医务室_病床区全景_白天", type: "场景", src: mediaUrl("media/academy/scene-medical-room.png") },
+  { id: "scene-corridor", nodeId: "asset-scenes-2", label: "教学楼走廊_完好状态_白天", type: "场景", src: mediaUrl("media/academy/scene-corridor-intact.png") },
+  { id: "scene-damaged", nodeId: "asset-scenes-3", label: "教学楼走廊_破窗战损_白天", type: "场景", src: mediaUrl("media/academy/scene-corridor-damaged.png") },
+  { id: "prop-tablet", nodeId: "asset-props-1", label: "临床平板终端", type: "道具", src: mediaUrl("media/academy/prop-clinical-tablet.png") },
+  { id: "prop-baton", nodeId: "asset-props-2", label: "电击警棍", type: "道具", src: mediaUrl("media/academy/prop-electric-baton.png") }
 ];
 
 type Props = {
@@ -72,7 +73,7 @@ export default function LeftNavigation({ open, query, onOpenChange, onQueryChang
               return <button className="asset-row" key={item.id} onClick={() => onLocate(item.nodeId)}>
                 <span
                   className={`asset-row-thumb ${hasPreview ? "media-crop" : "is-empty"}`}
-                  style={hasPreview ? { "--media-image": `url("${item.src}")`, "--media-fit": "cover", "--media-position": "50% 50%" } as React.CSSProperties : undefined}
+                  style={hasPreview ? { "--media-image": mediaCssUrl(item.src), "--media-fit": "cover", "--media-position": "50% 50%" } as React.CSSProperties : undefined}
                 />
                 <span><b>{item.label}</b><small>{item.type}</small></span><em>拖入</em>
               </button>;

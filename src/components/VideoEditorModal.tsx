@@ -24,6 +24,7 @@ import {
   X,
   ZoomIn
 } from "lucide-react";
+import { mediaCssUrl, mediaUrl } from "../utils/media";
 
 type Props = {
   open: boolean;
@@ -31,17 +32,17 @@ type Props = {
 };
 
 const clips = [
-  { id: "01", name: "病床惊醒", duration: "8s", src: "/media/academy/storyboard-01.png", video: "/media/academy/segment-01.mp4" },
-  { id: "02", name: "校医质询", duration: "11s", src: "/media/academy/storyboard-02.png", video: "/media/academy/segment-02.mp4" },
-  { id: "03", name: "身份缺失", duration: "15s", src: "/media/academy/storyboard-03.png", video: "/media/academy/segment-03.mp4" },
-  { id: "04", name: "权威压制", duration: "12s", src: "/media/academy/storyboard-04.png", video: "/media/academy/segment-04.mp4" },
-  { id: "05", name: "暗中决断", duration: "7s", src: "/media/academy/storyboard-05.png", video: "/media/academy/segment-05.mp4" },
-  { id: "06", name: "走廊引路", duration: "9s", src: "/media/academy/storyboard-06.png", video: "/media/academy/segment-06.mp4" },
-  { id: "07", name: "破窗挑衅", duration: "9s", src: "/media/academy/storyboard-07.png", video: "/media/academy/segment-07.mp4" }
+  { id: "01", name: "病床惊醒", duration: "8s", src: mediaUrl("media/academy/storyboard-01.png"), video: mediaUrl("media/academy/segment-01.mp4") },
+  { id: "02", name: "校医质询", duration: "11s", src: mediaUrl("media/academy/storyboard-02.png"), video: mediaUrl("media/academy/segment-02.mp4") },
+  { id: "03", name: "身份缺失", duration: "15s", src: mediaUrl("media/academy/storyboard-03.png"), video: mediaUrl("media/academy/segment-03.mp4") },
+  { id: "04", name: "权威压制", duration: "12s", src: mediaUrl("media/academy/storyboard-04.png"), video: mediaUrl("media/academy/segment-04.mp4") },
+  { id: "05", name: "暗中决断", duration: "7s", src: mediaUrl("media/academy/storyboard-05.png"), video: mediaUrl("media/academy/segment-05.mp4") },
+  { id: "06", name: "走廊引路", duration: "9s", src: mediaUrl("media/academy/storyboard-06.png"), video: mediaUrl("media/academy/segment-06.mp4") },
+  { id: "07", name: "破窗挑衅", duration: "9s", src: mediaUrl("media/academy/storyboard-07.png"), video: mediaUrl("media/academy/segment-07.mp4") }
 ];
 
 const mediaStyle = (src: string) => ({
-  "--media-image": `url("${src}")`,
+  "--media-image": mediaCssUrl(src),
   "--media-fit": "cover",
   "--media-position": "50% 50%"
 } as CSSProperties);
