@@ -1,0 +1,62 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "canvas": { "$value": "#09080C", "$type": "color" },
+    "surface": {
+      "primary": { "$value": "#131118", "$type": "color" },
+      "secondary": { "$value": "#1B1822", "$type": "color" },
+      "inset": { "$value": "#28232F", "$type": "color" }
+    },
+    "border": {
+      "default": { "$value": "#FFFFFF1A", "$type": "color" },
+      "visible": { "$value": "#FFFFFF40", "$type": "color" }
+    },
+    "text": {
+      "primary": { "$value": "#F5F5F5", "$type": "color" },
+      "secondary": { "$value": "#CFCFCF", "$type": "color" },
+      "tertiary": { "$value": "#7A7A7A", "$type": "color" },
+      "disabled": { "$value": "#646464", "$type": "color" }
+    },
+    "brand": {
+      "blue": { "$value": "#4C8DFF", "$type": "color" },
+      "violet": { "$value": "#8D5CFF", "$type": "color" },
+      "pink": { "$value": "#EF56C2", "$type": "color" },
+      "orange": { "$value": "#FF8A3D", "$type": "color" },
+      "yellow": { "$value": "#FFC74A", "$type": "color" }
+    },
+    "accent": {
+      "primary": { "$value": "#8D5CFF", "$type": "color" },
+      "field": { "$value": "#2A1C46", "$type": "color" }
+    },
+    "status": {
+      "success": { "$value": "#22C55E", "$type": "color" },
+      "warning": { "$value": "#FDCE8B", "$type": "color" },
+      "error": { "$value": "#FF6163", "$type": "color" }
+    }
+  },
+  "font": {
+    "display": { "$value": "Inter", "$type": "fontFamily" },
+    "body": { "$value": "Inter", "$type": "fontFamily" },
+    "mono": { "$value": "JetBrains Mono", "$type": "fontFamily" }
+  },
+  "space": {
+    "2xs": { "$value": "2px", "$type": "dimension" },
+    "xs": { "$value": "4px", "$type": "dimension" },
+    "sm": { "$value": "8px", "$type": "dimension" },
+    "md": { "$value": "16px", "$type": "dimension" },
+    "lg": { "$value": "24px", "$type": "dimension" },
+    "xl": { "$value": "32px", "$type": "dimension" }
+  },
+  "radius": {
+    "element": { "$value": "4px", "$type": "dimension" },
+    "control": { "$value": "12px", "$type": "dimension" },
+    "component": { "$value": "16px", "$type": "dimension" },
+    "container": { "$value": "22px", "$type": "dimension" },
+    "pill": { "$value": "999px", "$type": "dimension" }
+  },
+  "motion": {
+    "fast": { "$value": "150ms", "$type": "duration" },
+    "standard": { "$value": "220ms", "$type": "duration" },
+    "emphasis": { "$value": "420ms", "$type": "duration" }
+  }
+}
